@@ -21,7 +21,7 @@ const BookStore = React.createClass({
           this.setState({
                currentStep: nextStep,
                formValues: formValues,
-               cartTimeout: 10 * 1
+               cartTimeout: 60 * 15
           });
           console.log(formData);
      },
