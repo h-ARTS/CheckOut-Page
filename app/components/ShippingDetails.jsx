@@ -71,7 +71,7 @@ const ShippingDetails = React.createClass({
      render() {
           const errorMessage = this._renderError();
           const min = Math.floor(this.state.cartTimeout / 60),
-                sec = this.state.cartTimeout - min + 60;
+                sec = this.state.cartTimeout - min * 60;
           return(
                <div className="jumbotron">
                     <h1>Enter your shipping information.</h1>

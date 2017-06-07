@@ -19789,6 +19789,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactDom = __webpack_require__(158);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
 	var _BookList = __webpack_require__(160);
 
 	var _BookList2 = _interopRequireDefault(_BookList);
@@ -19820,8 +19824,7 @@
 	     getInitialState: function getInitialState() {
 	          return {
 	               currentStep: 1,
-	               formValues: {},
-	               cartTimeout: 60 * 15
+	               formValues: {}
 	          };
 	     },
 	     updateFormData: function updateFormData(formData) {
@@ -19830,7 +19833,8 @@
 
 	          this.setState({
 	               currentStep: nextStep,
-	               formValues: formValues
+	               formValues: formValues,
+	               cartTimeout: 10 * 1
 	          });
 	          console.log(formData);
 	     },
@@ -19840,7 +19844,7 @@
 	          });
 	     },
 	     alertCartTimeout: function alertCartTimeout() {
-	          ReactDOM.render(_react2.default.createElement(_ModalAlertTimeout2.default, null), document.getElementById('modal'));
+	          _reactDom2.default.render(_react2.default.createElement(_ModalAlertTimeout2.default, null), document.getElementById('modal'));
 	          this.setState({
 	               currentStep: 1,
 	               formValues: {},
@@ -19859,16 +19863,6 @@
 	                    return _react2.default.createElement(_Confirmation2.default, { data: this.state.formValues, updateFormData: this.updateFormData, cartTimeout: this.state.cartTimeout });
 	               case 5:
 	                    return _react2.default.createElement(_Success2.default, { data: this.state.formValues });
-	               case 10:
-	                    return _react2.default.createElement(
-	                         'div',
-	                         null,
-	                         _react2.default.createElement(
-	                              'h2',
-	                              null,
-	                              'Xour cart timed out, Please try again!'
-	                         )
-	                    );
 	               default:
 	                    return _react2.default.createElement(_BookList2.default, { updateFormData: this.updateFormData });
 	          }
@@ -20079,7 +20073,7 @@
 
 	          var errorMessage = this._renderError();
 	          var min = Math.floor(this.state.cartTimeout / 60),
-	              sec = this.state.cartTimeout - min + 60;
+	              sec = this.state.cartTimeout - min * 60;
 	          return _react2.default.createElement(
 	               'div',
 	               { className: 'jumbotron' },
@@ -20475,6 +20469,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactDom = __webpack_require__(158);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var ModalAlertTimeout = _react2.default.createClass({
@@ -20483,9 +20481,13 @@
 	          var _this = this;
 
 	          setTimeout(function () {
-	               var timeoutModal = ReactDOM.findDOMNode(_this.refs.timeoutModal);
+	               var timeoutModal = _reactDom2.default.findDOMNode(_this.refs.timeoutModal);
 	               $(timeoutModal).modal('show');
+	               $(timeoutModal).on('hidden.bs.modal', _this.unMountComponent);
 	          }, 100);
+	     },
+	     unMountComponent: function unMountComponent() {
+	          _reactDom2.default.unMountComponentAtNode(_reactDom2.default.findDOMNode(this.refs.timeoutModal).parentNode);
 	     },
 	     render: function render() {
 	          return _react2.default.createElement(

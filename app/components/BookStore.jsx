@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import BookList from './BookList';
 import ShippingDetails from './ShippingDetails';
 import DeliveryDetails from './DeliveryDetails';
@@ -10,8 +11,7 @@ const BookStore = React.createClass({
      getInitialState() {
           return({
                currentStep: 1,
-               formValues: {},
-               cartTimeout: 60 * 15
+               formValues: {}
           });
      },
      updateFormData(formData) {
@@ -20,7 +20,8 @@ const BookStore = React.createClass({
 
           this.setState({
                currentStep: nextStep,
-               formValues: formValues
+               formValues: formValues,
+               cartTimeout: 10 * 1
           });
           console.log(formData);
      },
@@ -52,8 +53,6 @@ const BookStore = React.createClass({
                     return <Confirmation data={this.state.formValues} updateFormData={this.updateFormData} cartTimeout={this.state.cartTimeout} />;
                case 5:
                     return <Success data={this.state.formValues} />;
-               case 10:
-                    return <div><h2>Xour cart timed out, Please try again!</h2></div>;
                default:
                     return <BookList updateFormData={this.updateFormData} />;
           }

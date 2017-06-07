@@ -1,11 +1,16 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 const ModalAlertTimeout = React.createClass({
      componentDidMount() {
        setTimeout(() => {
           let timeoutModal = ReactDOM.findDOMNode(this.refs.timeoutModal);
           $(timeoutModal).modal('show');
+          $(timeoutModal).on('hidden.bs.modal', this.unMountComponent);
        }, 100);   
+     },
+     unMountComponent() {
+          ReactDOM.unMountComponentAtNode(ReactDOM.findDOMNode(this.refs.timeoutModal).parentNode);
      },
      render() {
           return(
