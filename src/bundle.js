@@ -19809,6 +19809,10 @@
 
 	var _Success2 = _interopRequireDefault(_Success);
 
+	var _ModalAlertTimeout = __webpack_require__(167);
+
+	var _ModalAlertTimeout2 = _interopRequireDefault(_ModalAlertTimeout);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var BookStore = _react2.default.createClass({
@@ -19836,8 +19840,11 @@
 	          });
 	     },
 	     alertCartTimeout: function alertCartTimeout() {
+	          ReactDOM.render(_react2.default.createElement(_ModalAlertTimeout2.default, null), document.getElementById('modal'));
 	          this.setState({
-	               currentStep: 10
+	               currentStep: 1,
+	               formValues: {},
+	               cartTimeout: 1
 	          });
 	     },
 	     render: function render() {
@@ -20453,6 +20460,77 @@
 	});
 
 	exports.default = Success;
+
+/***/ }),
+/* 167 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	     value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ModalAlertTimeout = _react2.default.createClass({
+	     displayName: 'ModalAlertTimeout',
+	     componentDidMount: function componentDidMount() {
+	          var _this = this;
+
+	          setTimeout(function () {
+	               var timeoutModal = ReactDOM.findDOMNode(_this.refs.timeoutModal);
+	               $(timeoutModal).modal('show');
+	          }, 100);
+	     },
+	     render: function render() {
+	          return _react2.default.createElement(
+	               'div',
+	               { className: 'modal fade', ref: 'timeoutModal' },
+	               _react2.default.createElement(
+	                    'div',
+	                    { className: 'modal-dialog' },
+	                    _react2.default.createElement(
+	                         'div',
+	                         { className: 'modal-content' },
+	                         _react2.default.createElement(
+	                              'div',
+	                              { className: 'modal-header' },
+	                              _react2.default.createElement(
+	                                   'button',
+	                                   { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
+	                                   _react2.default.createElement(
+	                                        'span',
+	                                        { 'aria-hidden': 'true' },
+	                                        'x'
+	                                   )
+	                              ),
+	                              _react2.default.createElement(
+	                                   'h4',
+	                                   { className: 'modal-title' },
+	                                   'Timeout'
+	                              )
+	                         ),
+	                         _react2.default.createElement(
+	                              'div',
+	                              { className: 'modal-body' },
+	                              _react2.default.createElement(
+	                                   'p',
+	                                   null,
+	                                   'The cart has timed-out. Please try again!'
+	                              )
+	                         )
+	                    )
+	               )
+	          );
+	     }
+	});
+
+	exports.default = ModalAlertTimeout;
 
 /***/ })
 /******/ ]);

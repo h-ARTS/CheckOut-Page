@@ -4,6 +4,7 @@ import ShippingDetails from './ShippingDetails';
 import DeliveryDetails from './DeliveryDetails';
 import Confirmation from './Confirmation';
 import Success from './Success';
+import ModalAlertTimeout from './ModalAlertTimeout';
 
 const BookStore = React.createClass({
      getInitialState() {
@@ -29,8 +30,14 @@ const BookStore = React.createClass({
           });
      },
      alertCartTimeout() {
+          ReactDOM.render(
+               <ModalAlertTimeout />,
+               document.getElementById('modal')
+          );
           this.setState({
-               currentStep: 10
+               currentStep: 1,
+               formValues: {},
+               cartTimeout: 1
           });
      },
      render() {
