@@ -1,6 +1,6 @@
 import React from 'react';
 
-var Success = React.createClass({
+const Success = React.createClass({
      render() {
           var numberOfDays = "1 to 2";
 

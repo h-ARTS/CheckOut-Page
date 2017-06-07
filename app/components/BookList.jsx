@@ -1,6 +1,6 @@
 import React from 'react';
 
-var BookList = React.createClass({
+const BookList = React.createClass({
      getInitialState() {
           return(
                {
@@ -33,8 +33,8 @@ var BookList = React.createClass({
           );
      },
      handleSelectedBooks(e) {
-          var selectedBooks = this.state.selectedBooks;
-          var index = selectedBooks.indexOf(e.target.value);
+          const selectedBooks = this.state.selectedBooks;
+          const index = selectedBooks.indexOf(e.target.value);
 
           if (e.target.checked) {
                if(index === -1)
@@ -64,7 +64,7 @@ var BookList = React.createClass({
           console.log("Form submitted");
      },
      render() {
-          var errorMessage = this._renderError();
+          const errorMessage = this._renderError();
 
           return(
                <div className="jumbotron">

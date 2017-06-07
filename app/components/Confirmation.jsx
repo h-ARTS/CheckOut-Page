@@ -1,6 +1,6 @@
 import React from 'react';
 
-var Confirmation = React.createClass({
+const Confirmation = React.createClass({
      handleSubmit(e) {
           e.preventDefault();
           this.props.updateFormData(this.props.data);

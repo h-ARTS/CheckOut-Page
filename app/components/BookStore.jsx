@@ -5,16 +5,17 @@ import DeliveryDetails from './DeliveryDetails';
 import Confirmation from './Confirmation';
 import Success from './Success';
 
-var BookStore = React.createClass({
+const BookStore = React.createClass({
      getInitialState() {
           return({
                currentStep: 1,
-               formValues: {}
+               formValues: {},
+               cartTimeout: 60 * 15
           });
      },
      updateFormData(formData) {
-          var formValues = Object.assign({}, this.state.formValues, formData);
-          var nextStep = this.state.currentStep + 1;
+          const formValues = Object.assign({}, this.state.formValues, formData);
+          const nextStep = this.state.currentStep + 1;
 
           this.setState({
                currentStep: nextStep,
@@ -22,18 +23,30 @@ var BookStore = React.createClass({
           });
           console.log(formData);
      },
+     updateCartTimeout(timeout) {
+          this.setState({
+               cartTimeout: timeout
+          });
+     },
+     alertCartTimeout() {
+          this.setState({
+               currentStep: 10
+          });
+     },
      render() {
           switch(this.state.currentStep) {
                case 1:
                     return <BookList updateFormData={this.updateFormData} />;
                case 2:
-                    return <ShippingDetails updateFormData={this.updateFormData}/>;
+                    return <ShippingDetails updateFormData={this.updateFormData} cartTimeout={this.state.cartTimeout} updateCartTimeout={this.updateCartTimeout} alertCartTimeout={this.alertCartTimeout} />;
                case 3: 
-                    return <DeliveryDetails updateFormData={this.updateFormData}/>;
+                    return <DeliveryDetails updateFormData={this.updateFormData} cartTimeout={this.state.cartTimeout} updateCartTimeout={this.updateCartTimeout} alertCartTimeout={this.alertCartTimeout} />;
                case 4:
-                    return <Confirmation data={this.state.formValues} updateFormData={this.updateFormData}/>;
+                    return <Confirmation data={this.state.formValues} updateFormData={this.updateFormData} cartTimeout={this.state.cartTimeout} />;
                case 5:
                     return <Success data={this.state.formValues} />;
+               case 10:
+                    return <div><h2>Xour cart timed out, Please try again!</h2></div>;
                default:
                     return <BookList updateFormData={this.updateFormData} />;
           }

@@ -19801,11 +19801,11 @@
 
 	var _DeliveryDetails2 = _interopRequireDefault(_DeliveryDetails);
 
-	var _Confirmation = __webpack_require__(163);
+	var _Confirmation = __webpack_require__(165);
 
 	var _Confirmation2 = _interopRequireDefault(_Confirmation);
 
-	var _Success = __webpack_require__(164);
+	var _Success = __webpack_require__(166);
 
 	var _Success2 = _interopRequireDefault(_Success);
 
@@ -19816,7 +19816,8 @@
 	     getInitialState: function getInitialState() {
 	          return {
 	               currentStep: 1,
-	               formValues: {}
+	               formValues: {},
+	               cartTimeout: 60 * 15
 	          };
 	     },
 	     updateFormData: function updateFormData(formData) {
@@ -19829,18 +19830,38 @@
 	          });
 	          console.log(formData);
 	     },
+	     updateCartTimeout: function updateCartTimeout(timeout) {
+	          this.setState({
+	               cartTimeout: timeout
+	          });
+	     },
+	     alertCartTimeout: function alertCartTimeout() {
+	          this.setState({
+	               currentStep: 10
+	          });
+	     },
 	     render: function render() {
 	          switch (this.state.currentStep) {
 	               case 1:
 	                    return _react2.default.createElement(_BookList2.default, { updateFormData: this.updateFormData });
 	               case 2:
-	                    return _react2.default.createElement(_ShippingDetails2.default, { updateFormData: this.updateFormData });
+	                    return _react2.default.createElement(_ShippingDetails2.default, { updateFormData: this.updateFormData, cartTimeout: this.state.cartTimeout, updateCartTimeout: this.updateCartTimeout, alertCartTimeout: this.alertCartTimeout });
 	               case 3:
-	                    return _react2.default.createElement(_DeliveryDetails2.default, { updateFormData: this.updateFormData });
+	                    return _react2.default.createElement(_DeliveryDetails2.default, { updateFormData: this.updateFormData, cartTimeout: this.state.cartTimeout, updateCartTimeout: this.updateCartTimeout, alertCartTimeout: this.alertCartTimeout });
 	               case 4:
-	                    return _react2.default.createElement(_Confirmation2.default, { data: this.state.formValues, updateFormData: this.updateFormData });
+	                    return _react2.default.createElement(_Confirmation2.default, { data: this.state.formValues, updateFormData: this.updateFormData, cartTimeout: this.state.cartTimeout });
 	               case 5:
 	                    return _react2.default.createElement(_Success2.default, { data: this.state.formValues });
+	               case 10:
+	                    return _react2.default.createElement(
+	                         'div',
+	                         null,
+	                         _react2.default.createElement(
+	                              'h2',
+	                              null,
+	                              'Xour cart timed out, Please try again!'
+	                         )
+	                    );
 	               default:
 	                    return _react2.default.createElement(_BookList2.default, { updateFormData: this.updateFormData });
 	          }
@@ -19970,16 +19991,32 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _SetIntervalMixin = __webpack_require__(163);
+
+	var _SetIntervalMixin2 = _interopRequireDefault(_SetIntervalMixin);
+
+	var _CartTimeoutMixin = __webpack_require__(164);
+
+	var _CartTimeoutMixin2 = _interopRequireDefault(_CartTimeoutMixin);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var ShippingDetails = _react2.default.createClass({
 	     displayName: 'ShippingDetails',
+
+	     propTypes: {
+	          alertCartTimeout: _react2.default.PropTypes.func.isRequired,
+	          updateCartTimeout: _react2.default.PropTypes.func.isRequired,
+	          cartTimeout: _react2.default.PropTypes.number.isRequired
+	     },
+	     mixins: [_SetIntervalMixin2.default, _CartTimeoutMixin2.default],
 	     getInitialState: function getInitialState() {
 	          return {
 	               fullName: '',
 	               contactNumber: '',
 	               shippingAddress: '',
-	               error: false
+	               error: false,
+	               cartTimeout: this.props.cartTimeout
 	          };
 	     },
 	     _renderError: function _renderError() {
@@ -20034,6 +20071,8 @@
 	          var _this = this;
 
 	          var errorMessage = this._renderError();
+	          var min = Math.floor(this.state.cartTimeout / 60),
+	              sec = this.state.cartTimeout - min + 60;
 	          return _react2.default.createElement(
 	               'div',
 	               { className: 'jumbotron' },
@@ -20076,6 +20115,16 @@
 	                              'Submit'
 	                         )
 	                    )
+	               ),
+	               _react2.default.createElement(
+	                    'div',
+	                    { className: 'well' },
+	                    _react2.default.createElement('span', { className: 'glyphicon glyphicon-time', 'aria-label': 'true' }),
+	                    ' You have ',
+	                    min,
+	                    ' Minutes, ',
+	                    sec,
+	                    ' Seconds, before confirming order.'
 	               )
 	          );
 	     }
@@ -20097,14 +20146,35 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _SetIntervalMixin = __webpack_require__(163);
+
+	var _SetIntervalMixin2 = _interopRequireDefault(_SetIntervalMixin);
+
+	var _CartTimeoutMixin = __webpack_require__(164);
+
+	var _CartTimeoutMixin2 = _interopRequireDefault(_CartTimeoutMixin);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var DeliveryDetails = _react2.default.createClass({
 	     displayName: 'DeliveryDetails',
+
+	     propTypes: {
+	          alertCartTimeout: _react2.default.PropTypes.func.isRequired,
+	          updateCartTimeout: _react2.default.PropTypes.func.isRequired,
+	          cartTimeout: _react2.default.PropTypes.number.isRequired
+	     },
+	     mixins: [_SetIntervalMixin2.default, _CartTimeoutMixin2.default],
 	     getInitialState: function getInitialState() {
 	          return {
-	               deliveryOption: 'Primary'
+	               deliveryOption: 'Primary',
+	               cartTimeout: this.props.cartTimeout
 	          };
+	     },
+	     componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	          this.setState({
+	               cartTimeout: nextProps.cartTimeout
+	          });
 	     },
 	     handleChange: function handleChange(e) {
 	          this.setState({
@@ -20116,6 +20186,10 @@
 	          this.props.updateFormData(this.state);
 	     },
 	     render: function render() {
+
+	          var min = Math.floor(this.state.cartTimeout / 60),
+	              sec = this.state.cartTimeout - min * 60;
+
 	          return _react2.default.createElement(
 	               'div',
 	               { className: 'jumbotron' },
@@ -20156,6 +20230,16 @@
 	                              'Submit'
 	                         )
 	                    )
+	               ),
+	               _react2.default.createElement(
+	                    'div',
+	                    { className: 'well' },
+	                    _react2.default.createElement('span', { className: 'glyphicon glyphicon-time', 'aria-hidden': 'true' }),
+	                    ' You have ',
+	                    min,
+	                    ' Minutes, ',
+	                    sec,
+	                    ' Seconds, before confirming order.'
 	               )
 	          );
 	     }
@@ -20165,6 +20249,68 @@
 
 /***/ }),
 /* 163 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	     value: true
+	});
+	var SetIntervalMixin = {
+	     componentWillMount: function componentWillMount() {
+	          this.intervals = [];
+	     },
+	     setInterval: function (_setInterval) {
+	          function setInterval() {
+	               return _setInterval.apply(this, arguments);
+	          }
+
+	          setInterval.toString = function () {
+	               return _setInterval.toString();
+	          };
+
+	          return setInterval;
+	     }(function () {
+	          this.intervals.push(setInterval.apply(null, arguments));
+	     }),
+	     componentWillUnmount: function componentWillUnmount() {
+	          this.intervals.map(clearInterval);
+	     }
+	};
+
+	exports.default = SetIntervalMixin;
+
+/***/ }),
+/* 164 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	     value: true
+	});
+	var CartTimeoutMixin = {
+	     componentWillMount: function componentWillMount() {
+	          this.setInterval(this.decrementCartTimer, 1000);
+	     },
+	     decrementCartTimer: function decrementCartTimer() {
+	          if (this.state.cartTimeout === 0) {
+	               this.props.alertCartTimeout();
+	               return;
+	          }
+	          this.setState({
+	               cartTimeout: this.state.cartTimeout - 1
+	          });
+	     },
+	     componentWillUnmount: function componentWillUnmount() {
+	          this.props.updateCartTimeout(this.state.cartTimeout);
+	     }
+	};
+
+	exports.default = CartTimeoutMixin;
+
+/***/ }),
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20258,7 +20404,7 @@
 	exports.default = Confirmation;
 
 /***/ }),
-/* 164 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
