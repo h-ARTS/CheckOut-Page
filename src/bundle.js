@@ -19801,7 +19801,7 @@
 
 	var _ShippingDetails2 = _interopRequireDefault(_ShippingDetails);
 
-	var _DeliveryDetails = __webpack_require__(162);
+	var _DeliveryDetails = __webpack_require__(164);
 
 	var _DeliveryDetails2 = _interopRequireDefault(_DeliveryDetails);
 
@@ -19992,11 +19992,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _SetIntervalMixin = __webpack_require__(163);
+	var _SetIntervalMixin = __webpack_require__(162);
 
 	var _SetIntervalMixin2 = _interopRequireDefault(_SetIntervalMixin);
 
-	var _CartTimeoutMixin = __webpack_require__(164);
+	var _CartTimeoutMixin = __webpack_require__(163);
 
 	var _CartTimeoutMixin2 = _interopRequireDefault(_CartTimeoutMixin);
 
@@ -20135,6 +20135,68 @@
 
 /***/ }),
 /* 162 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	     value: true
+	});
+	var SetIntervalMixin = {
+	     componentWillMount: function componentWillMount() {
+	          this.intervals = [];
+	     },
+	     setInterval: function (_setInterval) {
+	          function setInterval() {
+	               return _setInterval.apply(this, arguments);
+	          }
+
+	          setInterval.toString = function () {
+	               return _setInterval.toString();
+	          };
+
+	          return setInterval;
+	     }(function () {
+	          this.intervals.push(setInterval.apply(null, arguments));
+	     }),
+	     componentWillUnmount: function componentWillUnmount() {
+	          this.intervals.map(clearInterval);
+	     }
+	};
+
+	exports.default = SetIntervalMixin;
+
+/***/ }),
+/* 163 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	     value: true
+	});
+	var CartTimeoutMixin = {
+	     componentWillMount: function componentWillMount() {
+	          this.setInterval(this.decrementCartTimer, 1000);
+	     },
+	     decrementCartTimer: function decrementCartTimer() {
+	          if (this.state.cartTimeout === 0) {
+	               this.props.alertCartTimeout();
+	               return;
+	          }
+	          this.setState({
+	               cartTimeout: this.state.cartTimeout - 1
+	          });
+	     },
+	     componentWillUnmount: function componentWillUnmount() {
+	          this.props.updateCartTimeout(this.state.cartTimeout);
+	     }
+	};
+
+	exports.default = CartTimeoutMixin;
+
+/***/ }),
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20147,11 +20209,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _SetIntervalMixin = __webpack_require__(163);
+	var _SetIntervalMixin = __webpack_require__(162);
 
 	var _SetIntervalMixin2 = _interopRequireDefault(_SetIntervalMixin);
 
-	var _CartTimeoutMixin = __webpack_require__(164);
+	var _CartTimeoutMixin = __webpack_require__(163);
 
 	var _CartTimeoutMixin2 = _interopRequireDefault(_CartTimeoutMixin);
 
@@ -20247,68 +20309,6 @@
 	});
 
 	exports.default = DeliveryDetails;
-
-/***/ }),
-/* 163 */
-/***/ (function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	     value: true
-	});
-	var SetIntervalMixin = {
-	     componentWillMount: function componentWillMount() {
-	          this.intervals = [];
-	     },
-	     setInterval: function (_setInterval) {
-	          function setInterval() {
-	               return _setInterval.apply(this, arguments);
-	          }
-
-	          setInterval.toString = function () {
-	               return _setInterval.toString();
-	          };
-
-	          return setInterval;
-	     }(function () {
-	          this.intervals.push(setInterval.apply(null, arguments));
-	     }),
-	     componentWillUnmount: function componentWillUnmount() {
-	          this.intervals.map(clearInterval);
-	     }
-	};
-
-	exports.default = SetIntervalMixin;
-
-/***/ }),
-/* 164 */
-/***/ (function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	     value: true
-	});
-	var CartTimeoutMixin = {
-	     componentWillMount: function componentWillMount() {
-	          this.setInterval(this.decrementCartTimer, 1000);
-	     },
-	     decrementCartTimer: function decrementCartTimer() {
-	          if (this.state.cartTimeout === 0) {
-	               this.props.alertCartTimeout();
-	               return;
-	          }
-	          this.setState({
-	               cartTimeout: this.state.cartTimeout - 1
-	          });
-	     },
-	     componentWillUnmount: function componentWillUnmount() {
-	          this.props.updateCartTimeout(this.state.cartTimeout);
-	     }
-	};
-
-	exports.default = CartTimeoutMixin;
 
 /***/ }),
 /* 165 */
@@ -20487,7 +20487,7 @@
 	          }, 100);
 	     },
 	     unMountComponent: function unMountComponent() {
-	          _reactDom2.default.unMountComponentAtNode(_reactDom2.default.findDOMNode(this.refs.timeoutModal).parentNode);
+	          _reactDom2.default.unmountComponentAtNode(_reactDom2.default.findDOMNode(this.refs.timeoutModal).parentNode);
 	     },
 	     render: function render() {
 	          return _react2.default.createElement(

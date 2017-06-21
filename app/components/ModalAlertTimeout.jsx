@@ -10,7 +10,7 @@ const ModalAlertTimeout = React.createClass({
        }, 100);   
      },
      unMountComponent() {
-          ReactDOM.unMountComponentAtNode(ReactDOM.findDOMNode(this.refs.timeoutModal).parentNode);
+          ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(this.refs.timeoutModal).parentNode);
      },
      render() {
           return(
